@@ -11,7 +11,7 @@ Below, you'll find a brief description of directories in this repository
 ## [Data](https://github.com/LeoBertiniNHM/ThesisChapter5/blob/b3a136229413adf8002ac26c5c1922e15e0fff5d/Data)
 - Spreadsheets containing data for age and stress event analyses
 - Links to the training datasets used and trained models 
-- [Histograms](https://github.com/LeoBertiniNHM/ThesisChapter5/blob/245455be378a4b7551d03315e1856a7ce89c332e/Data/Histograms_SegmentedFeatures) Contian all 16-bit histograms of segmented endolithic features 
+- [Histograms](https://github.com/LeoBertiniNHM/ThesisChapter5/blob/245455be378a4b7551d03315e1856a7ce89c332e/Data/Histograms_SegmentedFeatures) Contains all 16-bit histograms of segmented endolithic features 
 
 
 ## [Utils](https://github.com/LeoBertiniNHM/ThesisChapter5/blob/70da4b0f110126aedc543c251704c2fe764111da/Utils)
