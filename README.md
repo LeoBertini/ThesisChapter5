@@ -18,6 +18,6 @@ Below, you'll find a brief description of directories in this repository
 - Python code for mass import of groundtruth µCT X-ray slices onto [TagLab](https://taglab.isti.cnr.it/) for easy labelling
 - Python code to produce augmented CNN training datasets
 - Python code for densitometry
-- Python code for manipulation of labels and filename fixing
+- Python code for manipulation of X-ray label slices and filename fixing
 
 
