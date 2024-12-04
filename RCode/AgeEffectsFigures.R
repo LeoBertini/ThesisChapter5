@@ -15,10 +15,10 @@ library(ggpubr)
 library(ggpmisc)
 
 # Getting the path of current R file.. this is where figures will be saved by default
-setwd('/Users/leonardobertini/Library/CloudStorage/OneDrive-SharedLibraries-UniversityofBristol/RScripts')
+setwd('/Users/leonardobertini/Desktop')
 
 # importing datasets
-datapath="/Users/leonardobertini/Library/CloudStorage/OneDrive-SharedLibraries-UniversityofBristol/Coral_Growth_Data_Chapter5.xlsx"
+datapath="/Users/leonardobertini/PycharmProjects/ThesisChapter5/Data/Coral_Growth_Data_Chapter5.xlsx"
 MGA_DF = read_excel(datapath, sheet = 'DataArrangedForPlot')
 MGA_DF$Ext_cmyr = MGA_DF$Ext_mmyr*0.1
 
@@ -69,7 +69,6 @@ Complete_DF  = Complete_DF %>%
 #Converting to factors and adding a few more columns to dataframe
 Complete_DF$Location = factor(Complete_DF$Location)
 Complete_DF$CoralColony = factor(Complete_DF$CoralColony)
-Complete_DF$SurfaceArea = as.numeric(Complete_DF$SurfaceArea)/100 #converting from mm^2 to cm^2
 
 Complete_DF$Slab_Orientation = factor(Complete_DF$Slab_Orientation)
 Complete_DF$Age_Avg = (Complete_DF$TotalAgeMax+Complete_DF$TotalAgeMin)/2 #adding colony average Age based on min and max age estimates
@@ -77,16 +76,21 @@ Complete_DF$Calci_AMR_avg = (Complete_DF$Calci_AMR_max+Complete_DF$Calci_AMR_min
 
 # Now do figures with only vertical calcification-------------------------------------------------------------------------
 
-# INITIAL STATS BASED ON WHOLE DATA (2 oritentations per slab) -------------------------------------------------------------------------
+# INITIAL STATS BASED ON WHOLE DATA (2 orientations per slab) -------------------------------------------------------------------------
 #STATS OF EXTENSION VERSUS AGE
 library(lme4)
-model1 = lmer(formula = AMR_Ext_avg ~ Age_Avg + (1|Location) + (1|CoralColony) + (1|Slab_Orientation), data=Complete_DF)
+model1 = lmer(formula = AMR_Ext_avg ~ Age_Avg + (1|Slab_Orientation) + (1|Location) + (1|CoralColony), data=Complete_DF)
 summary(model1)
 require(MuMIn)
 r.squaredGLMM(model1)
 require(ggeffects)
 dat1 <- ggpredict(model1)
 plot(dat1)
+
+#checking the slopes and intercepts for different slab orientations
+library(lme4)
+model11 = lmer(formula = AMR_Ext_avg ~ Age_Avg*Slab_Orientation + (1|Location) + (1|CoralColony), data=Complete_DF)
+summary(model11)
 
 #STATS OF DENSITY VERSUS AGE
 library(lme4)
@@ -108,6 +112,10 @@ require(ggeffects)
 dat3 <- ggpredict(model3)
 plot(dat3)
 
+
+#checking the slopes and intercepts for different slab orientations
+model31 = lmer(formula = Calci_AMR_avg ~ Age_Avg*Slab_Orientation + (1|Location) + (1|CoralColony), data=Complete_DF)
+summary(model31)
 
 #PLOT MGA Calcification against all other types
 
@@ -281,6 +289,11 @@ Surface_Age = ggplot(aes(x=Age_Avg, y=Slab_Area_cm2, group=Slab_Orientation),
   ggtitle("Age vs Projected surface area")
 
 
+#fitting linear mixed effects model
+model41 = lmer(formula = Slab_Area_cm2 ~ Age_Avg*Slab_Orientation + (1|Location) + (1|CoralColony), data=Complete_DF)
+summary(model41)
+
+
 Radius_Age = ggplot(aes(x=Age_Avg, y=AMR_MeanDistance_cm),
                    data = Complete_DF)+
   
@@ -354,6 +367,9 @@ Vol_Weight = ggplot(aes(x=ColonyWeight, y=ColonyVolume),
   ylab(bquote(atop('Colony Volume', '['~cm^3~']')))+
   ggtitle("Weight vs Volume")
 
+#fitting linear mixed effects model
+model51 = lmer(formula = Slab_Area_cm2 ~ ColonyWeight*Slab_Orientation + (1|Location) + (1|CoralColony), data=Complete_DF)
+summary(model51)
 
 
 legend_b <- get_legend(Radius_Age + theme(legend.position="right"))

@@ -17,15 +17,14 @@ import torch.optim
 
 patch_size = 256
 
-
 params = {
-        "model": "UNet11",
-        "device": "cuda",
-        "lr": 0.001,
-        "batch_size": 16,
-        "num_workers": 0,
-        "epochs": 10,
-    }
+    "model": "UNet11",
+    "device": "cuda",
+    "lr": 0.001,
+    "batch_size": 16,
+    "num_workers": 0,
+    "epochs": 10,
+}
 
 # TODO import model here from saved state
 model_dir = "E:\\CoralWORMS\\MODELS\\model_GREY_E10.pth"
@@ -35,7 +34,7 @@ model.load_state_dict(torch.load(model_dir, map_location=device))
 
 # TODO import fullsized image stack
 stack_dir = "E:\\Leo_AlienCoral_DATA_ANALYSES\\LB_0001_BH\\TIFF_HorizontalAxis"
-out_dir =  "E:\\Leo_AlienCoral_DATA_ANALYSES\\LB_0001_BH\\PREDICTIONS"
+out_dir = "E:\\Leo_AlienCoral_DATA_ANALYSES\\LB_0001_BH\\PREDICTIONS"
 masked_pred_dir = os.path.join(out_dir, 'MASKED_OUTPUTS')
 os.makedirs(out_dir, exist_ok=True)
 os.makedirs(masked_pred_dir, exist_ok=True)
@@ -59,7 +58,7 @@ padding_H = patch_size - max_height % patch_size
 padding_W = patch_size - max_width % patch_size
 
 # master loop to pad image, break into 256*256 patches, do predictions, then stitch back together and save in directories
-for item in range(0,len(image_stack)):
+for item in range(0, len(image_stack)):
     img = cv2.imread(os.path.join(stack_dir, image_stack[item]), 0)
     old_image_height, old_image_width = img.shape
 
@@ -111,24 +110,25 @@ for item in range(0,len(image_stack)):
 
     # TODO Stitich image back together
     predicted_patches = np.array(predicted_patches)
-    predicted_patches_reshaped = np.reshape(predicted_patches, (patches.shape[0], patches.shape[1], patch_size, patch_size))
+    predicted_patches_reshaped = np.reshape(predicted_patches,
+                                            (patches.shape[0], patches.shape[1], patch_size, patch_size))
     reconstructed_mask = unpatchify(predicted_patches_reshaped, padded.shape)  # binary
-    #make mask grey 8bit
+    # make mask grey 8bit
     reconstructed_mask_grey = (reconstructed_mask * 255).astype('uint8')
 
     # crop back to original shape
-    reconstructed_mask_cropped = reconstructed_mask_grey[ y_center:new_image_height-y_center-1,
-                                 x_center:new_image_width-x_center-1]
+    reconstructed_mask_cropped = reconstructed_mask_grey[y_center:new_image_height - y_center - 1,
+                                 x_center:new_image_width - x_center - 1]
 
-    #now do overlay of predictions and original image padded
+    # now do overlay of predictions and original image padded
     alpha = 0.3
     image_combined = cv2.addWeighted(padded, 1 - alpha, reconstructed_mask_grey, alpha, 0)
 
-    #crop overlay
-    image_combined_cropped = image_combined[ y_center:new_image_height-y_center-1,
-                                 x_center:new_image_width-x_center-1]
+    # crop overlay
+    image_combined_cropped = image_combined[y_center:new_image_height - y_center - 1,
+                             x_center:new_image_width - x_center - 1]
 
-    #save binary masks and image overlay in dir
+    # save binary masks and image overlay in dir
     prediction_name = image_stack[item].split('.tif')[0] + '_predicted_mask.tiff'
     overlay_name = image_stack[item].split('.tif')[0] + '_overlay.tiff'
 

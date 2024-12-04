@@ -181,7 +181,7 @@ def save_weights_extended_case(scan_folder, calib_dir, project_dir_list):
                     break
 
             func_p = (lambda x, a, b, c, d: a * (x ** 3) + b * (
-                        x ** 2) + c * x + d)  # define function to find inverse with the coefficients found
+                    x ** 2) + c * x + d)  # define function to find inverse with the coefficients found
 
             # fitting inverse curve to retreive grays
             den_inserts = [0.1261, 0.26, 0.904, 1.13, 1.26, 1.44, 1.65, 1.77, 1.92, 2.7]
@@ -285,7 +285,6 @@ def save_weights_extended_case(scan_folder, calib_dir, project_dir_list):
         # now plotting the objects and where they fall in the curve
         symbols = ['*', 's', 'v', 'D', '<', '>']
         for k in range(0, len(features_names)):
-
             plt.scatter(features_avg_grey[k], features_avg_density[k], marker=symbols[k], color=(0, 0, 0), s=100,
                         label=features_names[k])
 
@@ -293,7 +292,9 @@ def save_weights_extended_case(scan_folder, calib_dir, project_dir_list):
         plt.ylabel('Density [$\mathregular{g.cm^{-3}}$]')
         plt.xlabel('Grey Value [0:$\mathregular{(2^{16}-1)}$]')
         plt.rcParams["font.family"] = "Arial"
-        plt.savefig(os.path.join(scan_folder, 'Diagnostic_Plots_Specimen_' + os.path.basename(scan_folder) + '.png'), dpi=300)
+        plt.savefig(os.path.join(scan_folder, 'Diagnostic_Plots_Specimen_' + os.path.basename(scan_folder) + '.png'),
+                    dpi=300)
+
 
 if __name__ == '__main__':
 

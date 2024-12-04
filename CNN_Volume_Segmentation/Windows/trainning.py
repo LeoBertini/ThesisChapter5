@@ -119,7 +119,6 @@ def train_and_validate(model, train_dataset, val_dataset, params):
     # writer.add_graph(model, images)
     # writer.flush()
 
-
     return model
 
 
@@ -215,12 +214,12 @@ if __name__ == "__main__":
     os.makedirs(pred_dir, exist_ok=True)
 
     DATA_FRAME = pd.DataFrame({"Image_Patch": [],
-                  "Precision": [],
-                  "Recall": [],
-                  "Accuracy1": [],
-                  "Accuracy2": [],
-                  "F1_score": []}
-                 )
+                               "Precision": [],
+                               "Recall": [],
+                               "Accuracy1": [],
+                               "Accuracy2": [],
+                               "F1_score": []}
+                              )
 
     Image_Patch_names = []
     Precision = []
@@ -246,23 +245,23 @@ if __name__ == "__main__":
 
         Image_Patch_names.append(original_name)
 
-        #print('F1: {}'.format(metrics.f1_score(gt_img, pred_data, average="weighted", zero_division=0)))
-        F1.append(metrics.f1_score(gt_img, pred_data , average="weighted", zero_division=0))
+        # print('F1: {}'.format(metrics.f1_score(gt_img, pred_data, average="weighted", zero_division=0)))
+        F1.append(metrics.f1_score(gt_img, pred_data, average="weighted", zero_division=0))
 
-        #print('Precision: {}'.format(metrics.precision_score(gt_img, pred_data, average="weighted", zero_division=0)))
+        # print('Precision: {}'.format(metrics.precision_score(gt_img, pred_data, average="weighted", zero_division=0)))
         Precision.append(metrics.precision_score(gt_img, pred_data, average="weighted", zero_division=0))
 
-        #print('Recall: {}'.format(metrics.recall_score(gt_img, pred_data, average="weighted", zero_division=0)))
+        # print('Recall: {}'.format(metrics.recall_score(gt_img, pred_data, average="weighted", zero_division=0)))
         Recall.append(metrics.recall_score(gt_img, pred_data, average="weighted", zero_division=0))
 
         gt_unique, gt_counts = np.unique(gt_img, return_counts=True)
         pred_unique, pred_counts = np.unique(pred_data, return_counts=True)
 
-        #print('Accuracy: {}'.format(metrics.accuracy_score(gt_img, pred_data)))
+        # print('Accuracy: {}'.format(metrics.accuracy_score(gt_img, pred_data)))
         Accuracy1.append(metrics.accuracy_score(gt_img, pred_data))
 
-        if len(gt_unique) >1 and len(pred_unique) >1:
-            Accuracy2.append(np.round(pred_counts[1]/gt_counts[1],3))
+        if len(gt_unique) > 1 and len(pred_unique) > 1:
+            Accuracy2.append(np.round(pred_counts[1] / gt_counts[1], 3))
         else:
             Accuracy2.append(-9999)
 
@@ -274,23 +273,22 @@ if __name__ == "__main__":
                                "F1_score": F1}
                               )
 
-    file_name = os.path.join(model_save_dir, 'Prediction_Metrics_'+model_name.split('.pth')[0]+'.xlsx')
+    file_name = os.path.join(model_save_dir, 'Prediction_Metrics_' + model_name.split('.pth')[0] + '.xlsx')
     DATA_FRAME.to_excel(file_name)
 
-
-        # if np.max(pred_data) > 0:
-        #     print(f"the image {original_name}' with index {indx} has worms in it)")
-        #
-        #     # saving cropped augmented
-        #     cv2.imwrite(os.path.join(pred_dir, original_name), original_img)
-        #     cv2.imwrite(os.path.join(pred_dir, pred_name), uint_img)
-        #     print(f"the image {original_name}' with index {indx} has worms in it)")
-        #
-        #     # saving cropped augmented
-        #     cv2.imwrite(os.path.join(pred_dir, original_name), original_img)
-        #     cv2.imwrite(os.path.join(pred_dir, pred_name), uint_img)
-        #
-        #     plt.imshow(original_img)
-        #     plt.show()
-        #     plt.imshow(pred_data)
-        #     plt.show()
+    # if np.max(pred_data) > 0:
+    #     print(f"the image {original_name}' with index {indx} has worms in it)")
+    #
+    #     # saving cropped augmented
+    #     cv2.imwrite(os.path.join(pred_dir, original_name), original_img)
+    #     cv2.imwrite(os.path.join(pred_dir, pred_name), uint_img)
+    #     print(f"the image {original_name}' with index {indx} has worms in it)")
+    #
+    #     # saving cropped augmented
+    #     cv2.imwrite(os.path.join(pred_dir, original_name), original_img)
+    #     cv2.imwrite(os.path.join(pred_dir, pred_name), uint_img)
+    #
+    #     plt.imshow(original_img)
+    #     plt.show()
+    #     plt.imshow(pred_data)
+    #     plt.show()

@@ -5,8 +5,9 @@ import numpy as np
 from torch.utils.data import Dataset, DataLoader
 from albumentations.pytorch import ToTensorV2
 
+
 def preprocess_mask(mask):
-    mask = mask.astype(np.float32)/255
+    mask = mask.astype(np.float32) / 255
     return mask
 
 
@@ -23,10 +24,11 @@ class WormDataset(Dataset):
     def __getitem__(self, idx):
         image_filename = self.images_filenames[idx]
 
-        image = cv2.imread(os.path.join(self.images_directory, image_filename),cv2.IMREAD_UNCHANGED)
-        #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image = cv2.imread(os.path.join(self.images_directory, image_filename), cv2.IMREAD_UNCHANGED)
+        # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-        mask = cv2.imread(os.path.join(self.masks_directory, image_filename.replace("_raw.tif", "_label.png")),cv2.IMREAD_GRAYSCALE)
+        mask = cv2.imread(os.path.join(self.masks_directory, image_filename.replace("_raw.tif", "_label.png")),
+                          cv2.IMREAD_GRAYSCALE)
         mask = preprocess_mask(mask)
 
         if self.transform is not None:
@@ -60,6 +62,7 @@ class MetricMonitor:
                 for (metric_name, metric) in self.metrics.items()
             ]
         )
+
 
 class InferenceWorm(Dataset):
     def __init__(self, images_filenames, images_directory, transform=None):
